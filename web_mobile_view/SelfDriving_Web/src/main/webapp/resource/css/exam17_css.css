@@ -1,0 +1,32 @@
+@charset "UTF-8";
+/* 선택자(tag이름) {
+				속성:값;
+				속성:값;
+				... 
+				} */
+button
+{
+	margin-bottom:10px;
+}
+
+#container /* ,div1 */
+{
+	margin-bottom:20px; 
+	padding:10px; 
+	border-top:1px solid black;
+}
+#div1
+{
+	width:100px;
+	height:100px; 
+	border:1px solid orange; 
+	display: inline-block;
+}
+.class1
+{
+	width:100px;
+	height:100px; 
+	border:1px solid orange; 
+	display: inline-block;
+}
+

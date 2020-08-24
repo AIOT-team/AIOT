@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+	<mapper namespace="animal">
+	
+			<!-- 프로시저를 호출합니다.-->
+			<insert id="insert" parameterType="animal" useGeneratedKeys="true" keyProperty="dno">
+					call ifdactno(#{dname},#{dnum},#{dlevel},#{dfinder},#{dzone},#{dimagesname},#{dlocation},#{dtime}, 0);
+					<!-- insert into animal (dname, dimagesname, dlocation, dtime, dnum, dfinder)
+					values (#{dname}, #{dimagesname}, #{dlocation}, #{dtime}, #{dnum}, #{dfinder}); -->
+			</insert>
+			
+			<!-- 로컬 경로에 저장되어있는 그림 미리보기 -->
+			<select id="selectByDno" parameterType="int" resultType ="animal">
+					select dno, dname, dnum, dfinder,dzone, dtime, dimagesname, dlocation
+					from animal
+					where dno = #{dno}
+			</select>
+			
+			<!-- history 뷰 페이지 테이블 구성 관련 -->
+			<select id="count" resultType="int">
+				select max(dactno) from animal
+			</select>
+			
+			<!-- history 뷰 페이지 테이블 구성 관련 -->
+			<!-- group by는 사건번호로 묶는 코드-->
+			<select id="selectByPage" resultType="animal">
+				select dno, dname, dimagesname, dlocation, dtime, dzone, dnum, dfinder, dlevel, dactno
+				from animal
+                group by dactno
+				order by dno desc
+				limit #{startIndex}, #{rowsPerPage}
+			</select>
+	
+			<select id="monthList" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%Y-%m-%d %h') as dpertime, max(dactno)-min(dactno) as dactno FROM animal GROUP BY dpertime;
+			</select>
+			<select id="monthListday" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%Y-%m-%d') as dpertime, max(dactno)-min(dactno) as dactno FROM animal GROUP BY dpertime;
+			</select>
+			<select id="monthListmonth" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%Y-%m') as dpertime, max(dactno)-min(dactno) as dactno FROM animal GROUP BY dpertime;
+			</select>
+			<select id="monthListyear" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%Y') as dpertime, max(dactno)-min(dactno) as dactno FROM animal GROUP BY dpertime;
+			</select>
+			
+			<select id="regionList" resultType="dactnoperFinder">
+					select dfinder,count(distinct(dactno)) as dperfinder from animal group by dfinder;
+			</select>
+			<select id="regionListoneweek" resultType="dactnoperFinder">
+					select dfinder,count(distinct(dactno)) as dperfinder from animal where dtime>date_add(now(),interval -1 week) group by dfinder;
+			</select>
+			<select id="regionListonemonth" resultType="dactnoperFinder">
+					select dfinder,count(distinct(dactno)) as dperfinder from animal where dtime>date_add(now(),interval -1 month) group by dfinder;
+			</select>
+			<select id="regionListoneyear" resultType="dactnoperFinder">
+					select dfinder,count(distinct(dactno)) as dperfinder from animal where dtime>date_add(now(),interval -1 year) group by dfinder;
+			</select>
+			<select id="howdanger" resultType="String">
+				select min(dlevel) from animal WHERE dtime>DATE_SUB(now(),INTERVAL 1 hour);
+			</select>
+			
+			<select id="selectByCCTV" resultType="animal">
+				select dno, dname, dlocation, dfinder, dzone, dlevel, dactno, dtime, dcomplete
+				from animal
+				where dfinder like '%cctv' and dcomplete=0
+                group by dactno
+				order by dtime
+			</select>
+			
+			<update id="updateDcompleteByDno">
+				update animal 
+				set dcomplete=1
+				where dactno IN (select dactno from (select dactno from animal where dno = #{dno}) a);		
+			</update>
+
+			<select id="hourList" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%H') as dpertime, count(distinct dactno) as dactno FROM animal GROUP BY dpertime;
+			</select>
+			
+			<select id="hourListoneweek" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%H') as dpertime, count(distinct dactno) as dactno FROM animal where dtime>date_add(now(),interval -1 week) GROUP BY dpertime ;
+			</select>
+			
+			<select id="hourListonemonth" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%H') as dpertime, count(distinct dactno) as dactno FROM animal where dtime>date_add(now(),interval -1 month) GROUP BY dpertime ;
+			</select>
+			
+			<select id="hourListoneyear" resultType="dactnoperTime">
+					SELECT DATE_FORMAT(dtime,'%H') as dpertime, count(distinct dactno) as dactno FROM animal where dtime>date_add(now(),interval -1 year) GROUP BY dpertime ;
+			</select>
+			
+			<select id="countLevel" resultType="dlevelCount">
+					select dlevel, count(dlevel) as dlevelCount from animal group by dlevel ;
+			</select>
+
+	</mapper>

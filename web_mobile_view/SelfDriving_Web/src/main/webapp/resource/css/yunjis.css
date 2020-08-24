@@ -1,0 +1,104 @@
+#div1 {font-size:48px}
+			
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+  > .col,
+  > [class*="*cols-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+}
+.jetToggle {
+justify-content: center; 
+align-content: center;
+}
+#image_steering {
+transform: rotate(0deg);
+}
+#batteryMode {
+  width: 340px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+}
+#batteryMode div {
+  width: 190px;
+  height: 30px;
+  text-align: center;
+}
+#showView {
+  width: 875px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+}
+#showView div {
+  height: 30px;
+  text-align: center;
+}
+.page-content {
+height: 760px;
+}
+.manual-button {
+color: black;
+width: 80px;
+font-weight: bold;
+border-width: medium; 
+}
+.manual-line {
+border-color:white; 
+border-width: medium; 
+background-color: lightgray; 
+color: black; 
+opacity: 0.9; 
+width: 90px; 
+font-weight: bold; 
+margin-top: 10px;
+}
+.driving-sign {
+width: 160px;
+position: absolute;
+left: 393px;
+/* color: lightgray; */
+font-weight: bold;
+font-size: small;
+opacity: 0.8; 
+background-color: #2d3035;
+}
+#jetracer {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation: myfirst 5s infinite;
+  animation-direction: normal;
+}
+
+	@keyframes myfirst {
+	  0%   {left: 0%; top: 0%;}
+	  25%  {left: 100%; top: 0%;}
+	  50%  {left: 100%; top: 100%;}
+	  75%  {left: 0%; top: 100%;}
+	  100% {left: 0%; top: 0%;}
+}
+body{
+font-size: 16px;
+}
+.detectContent {
+	background-color: transparent; 
+	border-color: transparent; 
+	color: white;
+	text-align: center;
+	padding-left: 70px;
+}
+html,body {
+height : 100%;
+}
